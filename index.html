@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>Brokerage CRM — Logistics Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="premium-grid-bg">
+    <!-- Background glow effects for Hero -->
+    <div class="bg-glow bg-glow-left"></div>
+    <div class="bg-glow bg-glow-right"></div>
+
+    <!-- 1. Sticky Hero Container -->
+    <div class="sticky-hero-container">
+        <nav class="navbar">
+            <div class="nav-left">
+                <img src="IMG/Logo.png" alt="Brokerage Logo" class="logo">
+            </div>
+            <div class="nav-right">
+                <a href="#contact" class="btn-secondary">Discuss project</a>
+                <a href="#features" class="btn-primary">Book a demo</a>
+            </div>
+        </nav>
+
+        <header class="hero">
+            <div class="hero-content">
+                <h1>Brokerage.</h1>
+                <h2>Streamline your freight operations, manage carriers, and track loads instantly. The all-in-one CRM built for modern logistics growth.</h2>
+                <a href="#features" class="btn-primary">Get started</a>
+            </div>
+
+            <div class="hero-image-wrapper">
+                <div class="hero-image-glow"></div>
+                <canvas id="hero-particles"></canvas>
+                <img src="IMG/Hero.png" alt="Brokerage CRM Interface" class="hero-image floating-img">
+            </div>
+        </header>
+    </div>
+
+    <!-- 2. Main Content (Slides over Hero) -->
+    <div class="main-content-wrapper premium-grid-bg">
+        <section class="social-proof">
+            <div class="section-inner">
+                <p>200+ logistics companies use Brokerage for growth</p>
+                <div class="logos-container">
+                    <div class="brand">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                        <span>FreightX</span>
+                    </div>
+                    <div class="brand" style="color: #4F46E5;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22h20L12 2z"></path></svg>
+                        <span>TransLog</span>
+                    </div>
+                    <div class="brand" style="color: #E11D48;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                        <span>LoadBoard</span>
+                    </div>
+                    <div class="brand" style="color: #0284C7;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <span>ShipFast</span>
+                    </div>
+                    <div class="brand" style="color: #0D9488;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <span>CargoLine</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <div class="section-inner">
+                <div class="features-header">
+                    <h2>Unlock Premium Benefits With<br>Our Advanced Features.</h2>
+                    <p>Everything you need to manage loads, track fleets, and scale your logistics operations in one centralized system.</p>
+                </div>
+
+                <div class="bento-grid">
+                    <div class="bento-card card-1">
+                        <div class="card-text">
+                            <h3>Load board</h3>
+                            <p>Post loads, find capacity, and cover freight faster with our intelligent real-time matching algorithm.</p>
+                        </div>
+                        <div class="card-img-wrap"><img src="IMG/1.png" alt="Load board interface"></div>
+                    </div>
+                    <div class="bento-card card-2">
+                        <div class="card-text">
+                            <h3>Expedite fleet</h3>
+                            <p>Keep your urgent shipments moving with live GPS tracking, status updates, and instant driver alerts.</p>
+                        </div>
+                        <div class="card-img-wrap"><img src="IMG/2.png" alt="Expedite fleet interface"></div>
+                    </div>
+                    <div class="bento-card card-3">
+                        <div class="card-text">
+                            <h3>Carriers</h3>
+                            <p>Streamline onboarding, monitor compliance, and build strong relationships with your entire carrier network.</p>
+                        </div>
+                        <div class="card-img-wrap tall-img"><img src="IMG/3.png" alt="Carriers interface"></div>
+                    </div>
+                    <div class="bento-card card-4">
+                        <div class="card-content-flex">
+                            <div class="card-text">
+                                <h3>Warehouses</h3>
+                                <p>Manage inventory, cross-docking, and yard operations with complete visibility and total control.</p>
+                            </div>
+                            <div class="card-img-wrap wide-img"><img src="IMG/4.png" alt="Warehouses interface"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audience Split -->
+        <section class="split-section">
+            <div class="split-container section-inner">
+                <div class="split-image-col">
+                    <div class="split-glow pulse-glow"></div>
+                    <img src="IMG/Frame 14.png" alt="Platform Transactions" class="split-img floating-img">
+                </div>
+                <div class="split-content-col">
+                    <h2>Seamless alignment for every logistics player.</h2>
+                    <p class="split-subtitle">Empower your entire supply chain with a unified system. Brokerage adapts to your role, eliminating friction and boosting margins.</p>
+                    <div class="accordion-wrapper">
+                        <div class="acc-item active">
+                            <div class="acc-header">
+                                <div class="acc-title-wrap">
+                                    <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                                    <h3>Freight Brokerages</h3>
+                                </div>
+                                <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                            </div>
+                            <div class="acc-body"><div class="acc-content">Match loads to carriers instantly. Automate compliance checks, track your margins in real-time, and scale your book of business without the operational bottlenecks.</div></div>
+                        </div>
+                        <div class="acc-item">
+                            <div class="acc-header">
+                                <div class="acc-title-wrap">
+                                    <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                                    <h3>Fleet Owners & Carriers</h3>
+                                </div>
+                                <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                            </div>
+                            <div class="acc-body"><div class="acc-content">Keep your trucks moving and drivers happy. Streamline dispatching, automate check-calls via mobile, and get paid faster with integrated invoicing and document management.</div></div>
+                        </div>
+                        <div class="acc-item">
+                            <div class="acc-header">
+                                <div class="acc-title-wrap">
+                                    <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    <h3>3PL & Warehousing</h3>
+                                </div>
+                                <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                            </div>
+                            <div class="acc-body"><div class="acc-content">Gain complete visibility across your entire supply chain. Manage warehouse inventory, track multi-modal shipments, and provide your clients with crystal-clear performance reporting.</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Split -->
+        <section class="split-section">
+            <div class="split-container reversed section-inner">
+                <div class="split-content-col">
+                    <h2>Crystal clear visibility into your margins.</h2>
+                    <p class="split-subtitle">Generate real-time reports and custom dashboards. Track every dollar, monitor performance metrics, and make data-driven decisions to scale your business.</p>
+                    <div class="accordion-wrapper">
+                        <div class="acc-item active">
+                            <div class="acc-header">
+                                <div class="acc-title-wrap">
+                                    <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
+                                    <h3>Financial Analytics</h3>
+                                </div>
+                                <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                            </div>
+                            <div class="acc-body"><div class="acc-content">Track gross margins, revenue per load, and overall profitability. Our system automatically reconciles carrier payables and customer receivables so you never miss a beat.</div></div>
+                        </div>
+                        <div class="acc-item">
+                            <div class="acc-header">
+                                <div class="acc-title-wrap">
+                                    <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                                    <h3>Performance Tracking</h3>
+                                </div>
+                                <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                            </div>
+                            <div class="acc-body"><div class="acc-content">Monitor on-time deliveries, drop-off rates, and compliance scores. Use historical data to identify your most reliable carriers and optimize your routing strategies.</div></div>
+                        </div>
+                        <div class="acc-item">
+                            <div class="acc-header">
+                                <div class="acc-title-wrap">
+                                    <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                    <h3>Custom Exporting</h3>
+                                </div>
+                                <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                            </div>
+                            <div class="acc-body"><div class="acc-content">Build custom views for different stakeholders and export them instantly. Generate beautiful PDF reports or raw CSV files for your accounting software in one click.</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="split-image-col">
+                    <div class="split-glow pulse-glow"></div>
+                    <img src="IMG/GR.png" alt="Analytics Dashboard" class="split-img floating-img-delayed">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 3. Sticky Pricing Container (Blue Background with Animated White Grid) -->
+    <div class="sticky-pricing-container">
+        <!-- Анимированная белая сетка для синего фона -->
+        <div class="pricing-grid-bg"></div>
+
+        <section class="pricing-blue section-inner">
+            <div class="pricing-header">
+                <h2>Transparent pricing for any fleet size</h2>
+                <p>Industry-leading logistics software designed to scale with your operations.</p>
+                <div class="pricing-toggle-wrap">
+                    <div class="pricing-toggle" id="pricing-toggle">
+                        <span class="active" data-type="monthly">Monthly</span>
+                        <span data-type="yearly">Yearly</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pricing-cards">
+                <!-- Basic Plan -->
+                <div class="p-card">
+                    <h3>Basic Package</h3>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount" data-monthly="99" data-yearly="79">99</span>
+                        <span class="period">/mo</span>
+                    </div>
+                    <p class="p-desc">Perfect for small brokerages and owner-operators.</p>
+                    <ul class="p-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 5 user seats</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Standard Load Board access</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Document management</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Basic financial reporting</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Standard support</li>
+                    </ul>
+                    <a href="#" class="btn-outline">Choose Basic</a>
+                </div>
+
+                <!-- Pro Plan (Dark Navy) -->
+                <div class="p-card popular">
+                    <div class="badge">Best Choice</div>
+                    <h3>Standard Package</h3>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount" data-monthly="199" data-yearly="159">199</span>
+                        <span class="period">/mo</span>
+                    </div>
+                    <p class="p-desc">For scaling teams needing advanced automation and tracking.</p>
+                    <ul class="p-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 15 user seats</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Live GPS Fleet Tracking</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Automated check-calls</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Advanced analytics & margins</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Priority 24/7 support</li>
+                    </ul>
+                    <a href="#" class="btn-primary-white">Choose Standard</a>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="p-card">
+                    <h3>Premium Package</h3>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount" data-monthly="399" data-yearly="319">399</span>
+                        <span class="period">/mo</span>
+                    </div>
+                    <p class="p-desc">Full power for large-scale 3PLs and enterprise fleets.</p>
+                    <ul class="p-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited user seats</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Custom API integrations</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Dedicated account manager</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> White-label client portal</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Custom onboarding</li>
+                    </ul>
+                    <a href="#" class="btn-outline">Choose Premium</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 4. FAQ & CTA Wrapper (Slides over Pricing, White BG + Grid) -->
+    <div class="faq-cta-wrapper premium-grid-bg">
+        
+        <!-- FAQ Section -->
+        <section class="faq">
+            <div class="section-inner">
+                <div class="faq-header">
+                    <h2>Frequently asked questions</h2>
+                    <p>Everything you need to know about the product and billing.</p>
+                </div>
+                
+                <div class="accordion-wrapper faq-wrapper">
+                    <div class="acc-item active">
+                        <div class="acc-header">
+                            <div class="acc-title-wrap"><h3>What is Brokerage CRM?</h3></div>
+                            <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                        </div>
+                        <div class="acc-body"><div class="acc-content">Brokerage CRM is an all-in-one logistics platform designed to help freight brokers, carriers, and 3PLs manage loads, track fleets, automate compliance, and handle invoicing in a single unified dashboard.</div></div>
+                    </div>
+                    <div class="acc-item">
+                        <div class="acc-header">
+                            <div class="acc-title-wrap"><h3>How long does implementation usually take?</h3></div>
+                            <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                        </div>
+                        <div class="acc-body"><div class="acc-content">Thanks to our intuitive design and dedicated onboarding team, most companies are fully transitioned and operational within 7 to 14 days, including data migration from legacy systems.</div></div>
+                    </div>
+                    <div class="acc-item">
+                        <div class="acc-header">
+                            <div class="acc-title-wrap"><h3>Do you integrate with existing load boards?</h3></div>
+                            <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                        </div>
+                        <div class="acc-body"><div class="acc-content">Yes. We offer seamless API integrations with major industry load boards like DAT, Truckstop, and 123Loadboard, allowing you to post and search for capacity without leaving the platform.</div></div>
+                    </div>
+                    <div class="acc-item">
+                        <div class="acc-header">
+                            <div class="acc-title-wrap"><h3>Is there a mobile app for drivers?</h3></div>
+                            <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                        </div>
+                        <div class="acc-body"><div class="acc-content">Absolutely. We provide a native mobile app for iOS and Android that allows drivers to submit BOLs, provide live GPS tracking updates, and automate check-calls directly from their phones.</div></div>
+                    </div>
+                    <div class="acc-item">
+                        <div class="acc-header">
+                            <div class="acc-title-wrap"><h3>How secure is our company and financial data?</h3></div>
+                            <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                        </div>
+                        <div class="acc-body"><div class="acc-content">Security is our top priority. We use bank-level AES-256 encryption, regular third-party security audits, and strict role-based access controls (RBAC) to ensure your data is always protected.</div></div>
+                    </div>
+                    <div class="acc-item">
+                        <div class="acc-header">
+                            <div class="acc-title-wrap"><h3>Can I customize the reporting dashboards?</h3></div>
+                            <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                        </div>
+                        <div class="acc-body"><div class="acc-content">Yes, our analytics engine is highly customizable. You can drag and drop widgets, create custom KPI metrics, and set up automated email reports for different team members or clients.</div></div>
+                    </div>
+                    <div class="acc-item">
+                        <div class="acc-header">
+                            <div class="acc-title-wrap"><h3>What kind of support do you offer?</h3></div>
+                            <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                        </div>
+                        <div class="acc-body"><div class="acc-content">All plans include 24/7 live chat and email support. Enterprise clients receive a dedicated account manager, priority phone support, and custom onboarding sessions for their entire team.</div></div>
+                    </div>
+                    <div class="acc-item">
+                        <div class="acc-header">
+                            <div class="acc-title-wrap"><h3>How is the pricing structured?</h3></div>
+                            <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                        </div>
+                        <div class="acc-body"><div class="acc-content">We offer a simple, transparent per-user subscription model billed either monthly or annually. There are no hidden fees, and you only pay for the active seats your team uses.</div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section (Pre-Footer) -->
+        <section class="cta-section">
+            <div class="section-inner">
+                <div class="cta-container">
+                    <div class="cta-glow pulse-glow"></div>
+                    <h1>Ready to streamline your logistics?</h1>
+                    <h2>Join 200+ companies accelerating their growth with Brokerage. Enter your email to start your free trial.</h2>
+                    
+                    <form class="cta-form" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="Enter your work email" required>
+                        <button type="submit" class="btn-primary">Get Started</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    <!-- End of FAQ/CTA wrapper -->
+    </div>
+
+    <!-- 5. Footer -->
+    <div class="footer-wrapper">
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-brand">
+                    <h2 class="footer-logo">Brokerage.</h2>
+                    <p>The premier operating system for modern freight brokerages, carriers, and 3PLs.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-column">
+                        <h4>Product</h4>
+                        <a href="#">Load Board</a>
+                        <a href="#">Fleet Tracking</a>
+                        <a href="#">Carrier CRM</a>
+                        <a href="#">Reporting</a>
+                    </div>
+                    <div class="link-column">
+                        <h4>Resources</h4>
+                        <a href="#">Documentation</a>
+                        <a href="#">API Reference</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Case Studies</a>
+                    </div>
+                    <div class="link-column">
+                        <h4>Company</h4>
+                        <a href="#">About Us</a>
+                        <a href="#">Careers</a>
+                        <a href="#">Contact</a>
+                        <a href="#">Partners</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Brokerage CRM. All rights reserved.</p>
+                <div class="legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
