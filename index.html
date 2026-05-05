@@ -10,33 +10,41 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="premium-grid-bg">
-    <!-- Background glow effects for Hero -->
-    <div class="bg-glow bg-glow-left"></div>
-    <div class="bg-glow bg-glow-right"></div>
+    <!-- Global Background glow effects -->
+    <div class="bg-glow bg-glow-left pulse-glow"></div>
+    <div class="bg-glow bg-glow-right pulse-glow"></div>
 
-    <!-- 1. Sticky Hero Container -->
-    <div class="sticky-hero-container">
+    <!-- 1. Sticky Hero Container with Digital Mountains -->
+    <div class="sticky-hero-container" id="hero-container">
+        
+        <!-- Animated 3D Mountains Canvas -->
+        <canvas id="mountain-canvas" class="hero-mountains"></canvas>
+        <div class="hero-overlay"></div>
+
         <nav class="navbar">
             <div class="nav-left">
                 <img src="IMG/Logo.png" alt="Brokerage Logo" class="logo">
             </div>
             <div class="nav-right">
-                <a href="#contact" class="btn-secondary">Discuss project</a>
+                <a href="#contact" class="btn-secondary dark-mode-btn">Discuss project</a>
                 <a href="#features" class="btn-primary">Book a demo</a>
             </div>
         </nav>
 
         <header class="hero">
             <div class="hero-content">
-                <h1>Brokerage.</h1>
-                <h2>Streamline your freight operations, manage carriers, and track loads instantly. The all-in-one CRM built for modern logistics growth.</h2>
-                <a href="#features" class="btn-primary">Get started</a>
+                <h1 class="animate-up">Brokerage.</h1>
+                <h2 class="animate-up delay-1">Streamline your freight operations, manage carriers, and track loads instantly. The all-in-one CRM built for modern logistics growth.</h2>
+                <div class="animate-up delay-2">
+                    <a href="#features" class="btn-primary">Get started</a>
+                </div>
             </div>
 
-            <div class="hero-image-wrapper">
-                <div class="hero-image-glow"></div>
-                <canvas id="hero-particles"></canvas>
-                <img src="IMG/Hero.png" alt="Brokerage CRM Interface" class="hero-image floating-img">
+            <div class="hero-image-wrapper animate-hero-img delay-3">
+                <div class="hero-image-glow pulse-glow"></div>
+                <div class="hero-parallax-layer" id="hero-parallax-img">
+                    <img src="IMG/Hero.png" alt="Brokerage CRM Interface" class="hero-image floating-img">
+                </div>
             </div>
         </header>
     </div>
@@ -180,7 +188,7 @@
                             <div class="acc-header">
                                 <div class="acc-title-wrap">
                                     <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                                    <h3>Performance Tracking.</h3>
+                                    <h3>Performance Tracking</h3>
                                 </div>
                                 <div class="acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
                             </div>
@@ -206,9 +214,8 @@
         </section>
     </div>
 
-    <!-- 3. Sticky Pricing Container (Blue Background with Animated White Grid) -->
+    <!-- 3. Sticky Pricing Container -->
     <div class="sticky-pricing-container">
-        <!-- Анимированная белая сетка для синего фона -->
         <div class="pricing-grid-bg"></div>
 
         <section class="pricing-blue section-inner">
@@ -243,7 +250,7 @@
                     <a href="#" class="btn-outline">Choose Basic</a>
                 </div>
 
-                <!-- Pro Plan (Dark Navy) -->
+                <!-- Standard Plan -->
                 <div class="p-card popular">
                     <div class="badge">Best Choice</div>
                     <h3>Standard Package</h3>
@@ -285,10 +292,8 @@
         </section>
     </div>
 
-    <!-- 4. FAQ & CTA Wrapper (Slides over Pricing, White BG + Grid) -->
+    <!-- 4. FAQ & CTA Wrapper -->
     <div class="faq-cta-wrapper premium-grid-bg">
-        
-        <!-- FAQ Section -->
         <section class="faq">
             <div class="section-inner">
                 <div class="faq-header">
@@ -357,7 +362,7 @@
             </div>
         </section>
 
-        <!-- CTA Section (Pre-Footer) -->
+        <!-- CTA Section -->
         <section class="cta-section">
             <div class="section-inner">
                 <div class="cta-container">
@@ -372,8 +377,6 @@
                 </div>
             </div>
         </section>
-
-    <!-- End of FAQ/CTA wrapper -->
     </div>
 
     <!-- 5. Footer -->

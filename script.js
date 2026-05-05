@@ -1,91 +1,145 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Hero Particles Animation
-    const canvas = document.getElementById('hero-particles');
+    
+    // 1. Digital 3D Mountains & Road Generator (Synthwave style)
+    const canvas = document.getElementById('mountain-canvas');
     if (canvas) {
         const ctx = canvas.getContext('2d');
         let width, height;
-        let particles = [];
 
-        function resizeCanvas() {
-            width = canvas.width = canvas.parentElement.offsetWidth * 1.4;
-            height = canvas.height = canvas.parentElement.offsetHeight * 1.4;
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let time = 0;
+        const speed = 4; // Скорость движения по дороге
+        const spacing = 80; // Размер ячейки сетки
+        const fov = 350; 
+        const cols = 60; // Ширина ландшафта
+        const rows = 35; // Дальность прорисовки
+
+        // Функция 3D -> 2D проекции
+        function project(x, y, z) {
+            let scale = fov / (fov + z);
+            return {
+                x: width / 2 + x * scale,
+                y: height / 2 + 180 - y * scale // 180 = высота камеры
+            };
         }
 
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = width / 2 + (Math.random() - 0.5) * (width * 0.9);
-                this.y = height / 2 + (Math.random() - 0.5) * (height * 0.9);
-                
-                this.vx = (Math.random() - 0.5) * 0.15;
-                this.vy = (Math.random() - 0.5) * 0.15 - 0.1;
-                
-                this.radius = Math.random() * 0.4 + 0.2;
-                this.baseAlpha = Math.random() * 0.6 + 0.2;
-                this.alpha = 0;
-                
-                this.life = Math.random() * 300 + 200;
-                this.age = 0;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.age++;
-
-                if (this.age < 30) {
-                    this.alpha = this.baseAlpha * (this.age / 30);
-                } else {
-                    this.alpha = this.baseAlpha * (1 - (this.age - 30) / (this.life - 30));
-                }
-
-                if (this.age >= this.life || this.alpha <= 0) {
-                    this.reset();
-                }
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(0, 85, 255, ${this.alpha})`;
-                
-                ctx.shadowBlur = 4;
-                ctx.shadowColor = `rgba(0, 85, 255, ${this.alpha})`;
-                
-                ctx.fill();
-                ctx.shadowBlur = 0; 
-            }
-        }
-
-        for (let i = 0; i < 80; i++) {
-            const p = new Particle();
-            p.age = Math.random() * p.life;
-            particles.push(p);
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
+        // Генерация высоты (Гладкая дорога + горы по бокам)
+        function getElevation(x, z) {
+            let dist = Math.abs(x);
+            // Дорога в центре
+            if (dist < 400) return 0;
             
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
-            requestAnimationFrame(animate);
+            // Горы возвышаются по бокам
+            let h = (dist - 400) * 0.55; 
+            // Комбинированный синус-косинус шум для деталей гор
+            let n = Math.sin(x * 0.005) * Math.cos(z * 0.005) * 200 + Math.sin(x * 0.02 + z * 0.02) * 50;
+            return h + n;
         }
 
-        animate();
+        function animateMountains() {
+            ctx.clearRect(0, 0, width, height);
+            time += speed; 
+
+            // Смещение для анимации движения вперед
+            let offsetZ = time % spacing; 
+            // Абсолютная координата Z для сохранения структуры гор при движении
+            let absoluteOffsetZ = Math.floor(time / spacing) * spacing;
+
+            let points = [];
+            
+            // Расчет 3D точек
+            for (let z = 0; z < rows; z++) {
+                points[z] = [];
+                for (let x = 0; x < cols; x++) {
+                    let actualX = (x - cols / 2) * spacing;
+                    let actualZ = z * spacing - offsetZ; 
+                    let absoluteZ = z * spacing + absoluteOffsetZ;
+
+                    let y = getElevation(actualX, absoluteZ);
+                    points[z][x] = project(actualX, y, actualZ);
+                }
+            }
+
+            ctx.lineWidth = 1.2;
+
+            // Отрисовка горизонтальных линий (слева направо)
+            for (let z = 0; z < rows - 1; z++) {
+                // Плавное затухание вдали (fog effect)
+                let alpha = 1 - Math.pow(z / rows, 1.5);
+                ctx.strokeStyle = `rgba(0, 85, 255, ${alpha * 0.8})`; 
+
+                ctx.beginPath();
+                for (let x = 0; x < cols; x++) {
+                    let p = points[z][x];
+                    if (x === 0) ctx.moveTo(p.x, p.y);
+                    else ctx.lineTo(p.x, p.y);
+                }
+                ctx.stroke();
+            }
+
+            // Отрисовка вертикальных линий (вдаль)
+            for (let x = 0; x < cols; x++) {
+                for (let z = 0; z < rows - 1; z++) {
+                    let p1 = points[z][x];
+                    let p2 = points[z + 1][x];
+                    
+                    let alpha = 1 - Math.pow(z / rows, 1.5);
+                    // Дорога светится ярче
+                    let distFromCenter = Math.abs((x - cols/2) * spacing);
+                    let isRoadEdge = distFromCenter === 400 || distFromCenter === 480;
+                    
+                    if (isRoadEdge) {
+                        ctx.strokeStyle = `rgba(0, 150, 255, ${alpha})`; // Яркая сине-голубая граница дороги
+                        ctx.lineWidth = 2;
+                    } else {
+                        ctx.strokeStyle = `rgba(0, 85, 255, ${alpha * 0.6})`;
+                        ctx.lineWidth = 1;
+                    }
+
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
+            }
+
+            requestAnimationFrame(animateMountains);
+        }
+        animateMountains();
     }
 
-    // 2. Isolated Accordion Logic
+    // 2. Parallax Effect for Interface Image
+    const heroContainer = document.getElementById('hero-container');
+    const parallaxImg = document.getElementById('hero-parallax-img');
+
+    if (heroContainer && parallaxImg && window.innerWidth > 768) {
+        heroContainer.addEventListener('mousemove', (e) => {
+            const rect = heroContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const imgTiltX = (centerX - x) / 50;
+            const imgTiltY = (centerY - y) / 50;
+            
+            parallaxImg.style.transform = `translate(${imgTiltX}px, ${imgTiltY}px) rotateX(${-imgTiltY/2}deg) rotateY(${imgTiltX/2}deg)`;
+        });
+
+        heroContainer.addEventListener('mouseleave', () => {
+            parallaxImg.style.transform = `translate(0px, 0px) rotateX(0deg) rotateY(0deg)`;
+        });
+    }
+
+    // 3. Accordion Logic
     const accordionWrappers = document.querySelectorAll('.accordion-wrapper');
-    
     accordionWrappers.forEach(wrapper => {
         const accItems = wrapper.querySelectorAll('.acc-item');
         
@@ -113,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Pricing Toggle Logic
+    // 4. Pricing Toggle Logic
     const pricingToggle = document.getElementById('pricing-toggle');
     if (pricingToggle) {
         const spans = pricingToggle.querySelectorAll('span');
