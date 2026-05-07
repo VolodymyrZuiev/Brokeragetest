@@ -14,30 +14,24 @@ document.addEventListener('DOMContentLoaded', () => {
         resize();
 
         let time = 0;
-        const speed = 4; // Скорость движения по дороге
-        const spacing = 80; // Размер ячейки сетки
+        const speed = 4;
+        const spacing = 80;
         const fov = 350; 
-        const cols = 60; // Ширина ландшафта
-        const rows = 35; // Дальность прорисовки
+        const cols = 60;
+        const rows = 35;
 
-        // Функция 3D -> 2D проекции
         function project(x, y, z) {
             let scale = fov / (fov + z);
             return {
                 x: width / 2 + x * scale,
-                y: height / 2 + 180 - y * scale // 180 = высота камеры
+                y: height / 2 + 180 - y * scale
             };
         }
 
-        // Генерация высоты (Гладкая дорога + горы по бокам)
         function getElevation(x, z) {
             let dist = Math.abs(x);
-            // Дорога в центре
             if (dist < 400) return 0;
-            
-            // Горы возвышаются по бокам
             let h = (dist - 400) * 0.55; 
-            // Комбинированный синус-косинус шум для деталей гор
             let n = Math.sin(x * 0.005) * Math.cos(z * 0.005) * 200 + Math.sin(x * 0.02 + z * 0.02) * 50;
             return h + n;
         }
@@ -46,14 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.clearRect(0, 0, width, height);
             time += speed; 
 
-            // Смещение для анимации движения вперед
             let offsetZ = time % spacing; 
-            // Абсолютная координата Z для сохранения структуры гор при движении
             let absoluteOffsetZ = Math.floor(time / spacing) * spacing;
 
             let points = [];
             
-            // Расчет 3D точек
             for (let z = 0; z < rows; z++) {
                 points[z] = [];
                 for (let x = 0; x < cols; x++) {
@@ -68,9 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             ctx.lineWidth = 1.2;
 
-            // Отрисовка горизонтальных линий (слева направо)
             for (let z = 0; z < rows - 1; z++) {
-                // Плавное затухание вдали (fog effect)
                 let alpha = 1 - Math.pow(z / rows, 1.5);
                 ctx.strokeStyle = `rgba(0, 85, 255, ${alpha * 0.8})`; 
 
@@ -83,19 +72,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.stroke();
             }
 
-            // Отрисовка вертикальных линий (вдаль)
             for (let x = 0; x < cols; x++) {
                 for (let z = 0; z < rows - 1; z++) {
                     let p1 = points[z][x];
                     let p2 = points[z + 1][x];
                     
                     let alpha = 1 - Math.pow(z / rows, 1.5);
-                    // Дорога светится ярче
                     let distFromCenter = Math.abs((x - cols/2) * spacing);
                     let isRoadEdge = distFromCenter === 400 || distFromCenter === 480;
                     
                     if (isRoadEdge) {
-                        ctx.strokeStyle = `rgba(0, 150, 255, ${alpha})`; // Яркая сине-голубая граница дороги
+                        ctx.strokeStyle = `rgba(0, 150, 255, ${alpha})`; 
                         ctx.lineWidth = 2;
                     } else {
                         ctx.strokeStyle = `rgba(0, 85, 255, ${alpha * 0.6})`;
@@ -114,32 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
         animateMountains();
     }
 
-    // 2. Parallax Effect for Interface Image
-    const heroContainer = document.getElementById('hero-container');
-    const parallaxImg = document.getElementById('hero-parallax-img');
-
-    if (heroContainer && parallaxImg && window.innerWidth > 768) {
-        heroContainer.addEventListener('mousemove', (e) => {
-            const rect = heroContainer.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const imgTiltX = (centerX - x) / 50;
-            const imgTiltY = (centerY - y) / 50;
-            
-            parallaxImg.style.transform = `translate(${imgTiltX}px, ${imgTiltY}px) rotateX(${-imgTiltY/2}deg) rotateY(${imgTiltX/2}deg)`;
-        });
-
-        heroContainer.addEventListener('mouseleave', () => {
-            parallaxImg.style.transform = `translate(0px, 0px) rotateX(0deg) rotateY(0deg)`;
-        });
-    }
-
-    // 3. Accordion Logic
+    // 2. Global Accordion Logic 
     const accordionWrappers = document.querySelectorAll('.accordion-wrapper');
+    
     accordionWrappers.forEach(wrapper => {
         const accItems = wrapper.querySelectorAll('.acc-item');
         
@@ -167,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 4. Pricing Toggle Logic
+    // 3. Pricing Toggle Logic
     const pricingToggle = document.getElementById('pricing-toggle');
     if (pricingToggle) {
         const spans = pricingToggle.querySelectorAll('span');
