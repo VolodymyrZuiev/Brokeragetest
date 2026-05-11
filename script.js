@@ -1,6 +1,35 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. Digital 3D Mountains & Road Generator (Synthwave style)
+
+    // 1. Smart Navbar Logic
+    const navbar = document.getElementById('smart-navbar');
+    let lastScrollY = window.scrollY;
+    let isScrolling;
+
+    window.addEventListener('scroll', () => {
+        // Hiding/Showing on scroll
+        if (window.scrollY > 80) {
+            if (window.scrollY > lastScrollY) {
+                // Scroll Down
+                navbar.classList.add('navbar--hidden');
+            } else {
+                // Scroll Up
+                navbar.classList.remove('navbar--hidden');
+            }
+        } else {
+            // Top of the page
+            navbar.classList.remove('navbar--hidden');
+        }
+        
+        lastScrollY = window.scrollY;
+
+        // Display navbar when scrolling stops
+        window.clearTimeout(isScrolling);
+        isScrolling = setTimeout(() => {
+            navbar.classList.remove('navbar--hidden');
+        }, 800); 
+    });
+
+    // 2. Digital 3D Mountains & Road Generator (Synthwave style)
     const canvas = document.getElementById('mountain-canvas');
     if (canvas) {
         const ctx = canvas.getContext('2d');
@@ -8,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function resize() {
             width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
+            height = canvas.height = document.getElementById('hero-container').offsetHeight;
         }
         window.addEventListener('resize', resize);
         resize();
@@ -101,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         animateMountains();
     }
 
-    // 2. Global Accordion Logic 
+    // 3. Global Accordion Logic 
     const accordionWrappers = document.querySelectorAll('.accordion-wrapper');
     
     accordionWrappers.forEach(wrapper => {
@@ -131,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Pricing Toggle Logic
+    // 4. Pricing Toggle Logic
     const pricingToggle = document.getElementById('pricing-toggle');
     if (pricingToggle) {
         const spans = pricingToggle.querySelectorAll('span');
