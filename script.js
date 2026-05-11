@@ -6,128 +6,159 @@ document.addEventListener('DOMContentLoaded', () => {
     let isScrolling;
 
     window.addEventListener('scroll', () => {
-        // Hiding/Showing on scroll
         if (window.scrollY > 80) {
             if (window.scrollY > lastScrollY) {
-                // Scroll Down
                 navbar.classList.add('navbar--hidden');
             } else {
-                // Scroll Up
                 navbar.classList.remove('navbar--hidden');
             }
         } else {
-            // Top of the page
             navbar.classList.remove('navbar--hidden');
         }
         
         lastScrollY = window.scrollY;
 
-        // Display navbar when scrolling stops
         window.clearTimeout(isScrolling);
         isScrolling = setTimeout(() => {
             navbar.classList.remove('navbar--hidden');
         }, 800); 
     });
 
-    // 2. Digital 3D Mountains & Road Generator (Synthwave style)
-    const canvas = document.getElementById('mountain-canvas');
-    if (canvas) {
-        const ctx = canvas.getContext('2d');
-        let width, height;
+    // 2. WebGL Mapbox/MapLibre Initialization (Global Focus & No Labels)
+    const mapContainer = document.getElementById('hero-map-container');
+    if (mapContainer && typeof maplibregl !== 'undefined') {
+        
+        const map = new maplibregl.Map({
+            container: 'hero-map-container',
+            style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json', 
+            center: [-35.0, 42.0], // Атлантика
+            zoom: 2.2, 
+            pitch: 45, 
+            bearing: -10, 
+            interactive: false 
+        });
 
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = document.getElementById('hero-container').offsetHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        let time = 0;
-        const speed = 4;
-        const spacing = 80;
-        const fov = 350; 
-        const cols = 60;
-        const rows = 35;
-
-        function project(x, y, z) {
-            let scale = fov / (fov + z);
-            return {
-                x: width / 2 + x * scale,
-                y: height / 2 + 180 - y * scale
-            };
-        }
-
-        function getElevation(x, z) {
-            let dist = Math.abs(x);
-            if (dist < 400) return 0;
-            let h = (dist - 400) * 0.55; 
-            let n = Math.sin(x * 0.005) * Math.cos(z * 0.005) * 200 + Math.sin(x * 0.02 + z * 0.02) * 50;
-            return h + n;
-        }
-
-        function animateMountains() {
-            ctx.clearRect(0, 0, width, height);
-            time += speed; 
-
-            let offsetZ = time % spacing; 
-            let absoluteOffsetZ = Math.floor(time / spacing) * spacing;
-
-            let points = [];
+        map.on('load', () => {
             
-            for (let z = 0; z < rows; z++) {
-                points[z] = [];
-                for (let x = 0; x < cols; x++) {
-                    let actualX = (x - cols / 2) * spacing;
-                    let actualZ = z * spacing - offsetZ; 
-                    let absoluteZ = z * spacing + absoluteOffsetZ;
-
-                    let y = getElevation(actualX, absoluteZ);
-                    points[z][x] = project(actualX, y, actualZ);
+            // Удаляем все текстовые слои (названия стран, городов, улиц), оставляя только чистую карту
+            map.getStyle().layers.forEach((layer) => {
+                if (layer.type === 'symbol') {
+                    map.removeLayer(layer.id);
                 }
+            });
+
+            // Глобальные маршруты (США <-> Европа + внутренние)
+            const routes = [
+                { start: [-74.006, 40.712], end: [-0.1276, 51.5072] }, // Нью-Йорк -> Лондон
+                { start: [-80.191, 25.761], end: [2.3522, 48.8566] },  // Майами -> Париж
+                { start: [-95.369, 29.760], end: [-3.7038, 40.4168] }, // Хьюстон -> Мадрид
+                { start: [-87.629, 41.878], end: [8.6821, 50.1109] },  // Чикаго -> Франкфурт
+                { start: [-118.243, 34.052], end: [-74.006, 40.712] }, // Лос-Анджелес -> Нью-Йорк
+                { start: [-0.1276, 51.5072], end: [12.4924, 41.8902] } // Лондон -> Рим
+            ];
+
+            // Создаем красивую дугу из 100 отрезков
+            function getCurve(start, end) {
+                const coords = [];
+                const segments = 100;
+                for(let i = 0; i <= segments; i++) {
+                    let t = i / segments;
+                    let lng = start[0] + (end[0] - start[0]) * t;
+                    let lat = start[1] + (end[1] - start[1]) * t;
+                    // Изгиб дуги
+                    lat += Math.sin(t * Math.PI) * 8; 
+                    coords.push([lng, lat]);
+                }
+                return coords;
             }
 
-            ctx.lineWidth = 1.2;
-
-            for (let z = 0; z < rows - 1; z++) {
-                let alpha = 1 - Math.pow(z / rows, 1.5);
-                ctx.strokeStyle = `rgba(0, 85, 255, ${alpha * 0.8})`; 
-
-                ctx.beginPath();
-                for (let x = 0; x < cols; x++) {
-                    let p = points[z][x];
-                    if (x === 0) ctx.moveTo(p.x, p.y);
-                    else ctx.lineTo(p.x, p.y);
-                }
-                ctx.stroke();
-            }
-
-            for (let x = 0; x < cols; x++) {
-                for (let z = 0; z < rows - 1; z++) {
-                    let p1 = points[z][x];
-                    let p2 = points[z + 1][x];
-                    
-                    let alpha = 1 - Math.pow(z / rows, 1.5);
-                    let distFromCenter = Math.abs((x - cols/2) * spacing);
-                    let isRoadEdge = distFromCenter === 400 || distFromCenter === 480;
-                    
-                    if (isRoadEdge) {
-                        ctx.strokeStyle = `rgba(0, 150, 255, ${alpha})`; 
-                        ctx.lineWidth = 2;
-                    } else {
-                        ctx.strokeStyle = `rgba(0, 85, 255, ${alpha * 0.6})`;
-                        ctx.lineWidth = 1;
+            routes.forEach((route, i) => {
+                const arc = getCurve(route.start, route.end);
+                
+                // 1. Линия маршрута
+                map.addSource(`route-${i}`, {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'properties': {},
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': arc
+                        }
                     }
+                });
 
-                    ctx.beginPath();
-                    ctx.moveTo(p1.x, p1.y);
-                    ctx.lineTo(p2.x, p2.y);
-                    ctx.stroke();
+                map.addLayer({
+                    'id': `route-line-${i}`,
+                    'type': 'line',
+                    'source': `route-${i}`,
+                    'layout': { 'line-join': 'round', 'line-cap': 'round' },
+                    'paint': { 
+                        'line-color': '#0055ff', 
+                        'line-width': 2, 
+                        'line-opacity': 0.3 
+                    }
+                });
+
+                // 2. Движущийся груз (точка)
+                map.addSource(`point-${i}`, {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': arc[0]
+                        }
+                    }
+                });
+
+                // Тень (свечение)
+                map.addLayer({
+                    'id': `point-glow-${i}`,
+                    'type': 'circle',
+                    'source': `point-${i}`,
+                    'paint': {
+                        'circle-radius': 12,
+                        'circle-color': '#00c6ff',
+                        'circle-blur': 1,
+                        'circle-opacity': 0.5
+                    }
+                });
+
+                // Само ядро точки
+                map.addLayer({
+                    'id': `point-core-${i}`,
+                    'type': 'circle',
+                    'source': `point-${i}`,
+                    'paint': {
+                        'circle-radius': 4,
+                        'circle-color': '#ffffff'
+                    }
+                });
+
+                // Анимация
+                let counter = Math.random(); 
+                let speed = 0.0015 + (Math.random() * 0.002);
+                
+                function animate() {
+                    counter += speed;
+                    if (counter > 1) counter = 0;
+                    
+                    const idx = Math.floor(counter * 100);
+                    if(arc[idx]) {
+                        map.getSource(`point-${i}`).setData({
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': arc[idx]
+                            }
+                        });
+                    }
+                    requestAnimationFrame(animate);
                 }
-            }
-
-            requestAnimationFrame(animateMountains);
-        }
-        animateMountains();
+                animate();
+            });
+        });
     }
 
     // 3. Global Accordion Logic 
