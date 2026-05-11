@@ -38,15 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // 2. WebGL Mapbox/MapLibre Initialization (USA FOCUS + NATIVE GL DOTS)
+    // 2. WebGL Mapbox/MapLibre Initialization (ОПТИМИЗИРОВАНО ДЛЯ USA FOCUS)
     const mapContainer = document.getElementById('hero-map-container');
     if (mapContainer && typeof maplibregl !== 'undefined') {
         
         const map = new maplibregl.Map({
             container: 'hero-map-container',
             style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json', 
-            // Фокус на США
-            center: [-98.5795, 38.8283], 
+            center: [-98.5795, 38.8283], // Фокус на США
             zoom: 3.8, 
             pitch: 50, 
             bearing: -15, 
@@ -58,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(fallbackTimer);
             removeLoader();
 
-            // Удаляем все текстовые/символьные слои карты
+            // Удаляем все текстовые слои
             map.getStyle().layers.forEach((layer) => {
                 if (layer.type === 'symbol') {
                     map.removeLayer(layer.id);
@@ -80,99 +79,105 @@ document.addEventListener('DOMContentLoaded', () => {
                     let t = i / segments;
                     let lng = start[0] + (end[0] - start[0]) * t;
                     let lat = start[1] + (end[1] - start[1]) * t;
-                    // Аккуратная дуга для США
                     lat += Math.sin(t * Math.PI) * 4; 
                     coords.push([lng, lat]);
                 }
                 return coords;
             }
 
-            routes.forEach((route, i) => {
-                const arc = getCurve(route.start, route.end);
-                
-                // 1. Линия маршрута
-                map.addSource(`route-${i}`, {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'Feature',
-                        'properties': {},
-                        'geometry': {
-                            'type': 'LineString',
-                            'coordinates': arc
-                        }
-                    }
-                });
+            // --- ЕДИНЫЙ ИСТОЧНИК ДЛЯ АНИМАЦИИ (ОПТИМИЗАЦИЯ WebGL) ---
+            const arcs = routes.map(r => getCurve(r.start, r.end));
 
-                map.addLayer({
-                    'id': `route-line-${i}`,
-                    'type': 'line',
-                    'source': `route-${i}`,
-                    'layout': { 'line-join': 'round', 'line-cap': 'round' },
-                    'paint': { 
-                        'line-color': '#0055ff', 
-                        'line-width': 2, 
-                        'line-opacity': 0.3 
-                    }
-                });
+            const lineFeatures = arcs.map(arc => ({
+                type: 'Feature',
+                geometry: { type: 'LineString', coordinates: arc }
+            }));
 
-                // 2. Движущийся груз (светящаяся точка через WebGL, никаких дефолтных маркеров)
-                map.addSource(`point-${i}`, {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': arc[0]
-                        }
-                    }
-                });
-
-                // Тень (свечение)
-                map.addLayer({
-                    'id': `point-glow-${i}`,
-                    'type': 'circle',
-                    'source': `point-${i}`,
-                    'paint': {
-                        'circle-radius': 12,
-                        'circle-color': '#00c6ff',
-                        'circle-blur': 1,
-                        'circle-opacity': 0.5
-                    }
-                });
-
-                // Само ядро точки
-                map.addLayer({
-                    'id': `point-core-${i}`,
-                    'type': 'circle',
-                    'source': `point-${i}`,
-                    'paint': {
-                        'circle-radius': 4,
-                        'circle-color': '#ffffff'
-                    }
-                });
-
-                // Анимация
-                let counter = Math.random(); 
-                let speed = 0.002 + (Math.random() * 0.002);
-                
-                function animate() {
-                    counter += speed;
-                    if (counter > 1) counter = 0;
-                    
-                    const idx = Math.floor(counter * 100);
-                    if(arc[idx]) {
-                        map.getSource(`point-${i}`).setData({
-                            'type': 'Feature',
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': arc[idx]
-                            }
-                        });
-                    }
-                    requestAnimationFrame(animate);
-                }
-                animate();
+            // Рисуем все статичные дуги одним слоем
+            map.addSource('all-routes', {
+                type: 'geojson',
+                data: { type: 'FeatureCollection', features: lineFeatures }
             });
+
+            map.addLayer({
+                id: 'all-routes-layer',
+                type: 'line',
+                source: 'all-routes',
+                layout: { 'line-join': 'round', 'line-cap': 'round' },
+                paint: { 
+                    'line-color': '#0055ff', 
+                    'line-width': 2, 
+                    'line-opacity': 0.3 
+                }
+            });
+
+            // Формируем точки для анимации в одном массиве
+            const pointFeatures = arcs.map((arc, i) => ({
+                type: 'Feature',
+                geometry: { type: 'Point', coordinates: arc[0] },
+                properties: {
+                    arcIndex: i,
+                    counter: Math.random(), 
+                    speed: 0.002 + (Math.random() * 0.002)
+                }
+            }));
+
+            const pointsData = { type: 'FeatureCollection', features: pointFeatures };
+
+            map.addSource('moving-points', {
+                type: 'geojson',
+                data: pointsData
+            });
+
+            // Добавляем WebGL ядро и свечение 
+            map.addLayer({
+                id: 'points-glow',
+                type: 'circle',
+                source: 'moving-points',
+                paint: {
+                    'circle-radius': 12,
+                    'circle-color': '#00c6ff',
+                    'circle-blur': 1,
+                    'circle-opacity': 0.5
+                }
+            });
+
+            map.addLayer({
+                id: 'points-core',
+                type: 'circle',
+                source: 'moving-points',
+                paint: {
+                    'circle-radius': 4,
+                    'circle-color': '#ffffff'
+                }
+            });
+
+            // ЕДИНЫЙ ЦИКЛ АНИМАЦИИ
+            function animate() {
+                let needsUpdate = false;
+                
+                pointFeatures.forEach(feature => {
+                    const props = feature.properties;
+                    props.counter += props.speed;
+                    if (props.counter > 1) props.counter = 0;
+                    
+                    const idx = Math.floor(props.counter * 100);
+                    const currentArc = arcs[props.arcIndex];
+                    
+                    if(currentArc[idx]) {
+                        feature.geometry.coordinates = currentArc[idx];
+                        needsUpdate = true;
+                    }
+                });
+
+                if (needsUpdate) {
+                    map.getSource('moving-points').setData(pointsData);
+                }
+
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
         });
     } else {
         removeLoader();
