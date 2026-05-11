@@ -1,5 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- Управление Прелоадером ---
+    const preloader = document.getElementById('preloader');
+    
+    function removeLoader() {
+        if (preloader) {
+            preloader.classList.add('hidden');
+            document.body.classList.remove('loading');
+        }
+    }
+
+    const fallbackTimer = setTimeout(removeLoader, 3000);
+
+
     // 1. Smart Navbar Logic
     const navbar = document.getElementById('smart-navbar');
     let lastScrollY = window.scrollY;
@@ -24,40 +37,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 800); 
     });
 
-    // 2. WebGL Mapbox/MapLibre Initialization (Global Focus & No Labels)
+
+    // 2. WebGL Mapbox/MapLibre Initialization (USA FOCUS + NATIVE GL DOTS)
     const mapContainer = document.getElementById('hero-map-container');
     if (mapContainer && typeof maplibregl !== 'undefined') {
         
         const map = new maplibregl.Map({
             container: 'hero-map-container',
             style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json', 
-            center: [-35.0, 42.0], // Атлантика
-            zoom: 2.2, 
-            pitch: 45, 
-            bearing: -10, 
+            // Фокус на США
+            center: [-98.5795, 38.8283], 
+            zoom: 3.8, 
+            pitch: 50, 
+            bearing: -15, 
             interactive: false 
         });
 
         map.on('load', () => {
             
-            // Удаляем все текстовые слои (названия стран, городов, улиц), оставляя только чистую карту
+            clearTimeout(fallbackTimer);
+            removeLoader();
+
+            // Удаляем все текстовые/символьные слои карты
             map.getStyle().layers.forEach((layer) => {
                 if (layer.type === 'symbol') {
                     map.removeLayer(layer.id);
                 }
             });
 
-            // Глобальные маршруты (США <-> Европа + внутренние)
+            // Внутренние маршруты по США
             const routes = [
-                { start: [-74.006, 40.712], end: [-0.1276, 51.5072] }, // Нью-Йорк -> Лондон
-                { start: [-80.191, 25.761], end: [2.3522, 48.8566] },  // Майами -> Париж
-                { start: [-95.369, 29.760], end: [-3.7038, 40.4168] }, // Хьюстон -> Мадрид
-                { start: [-87.629, 41.878], end: [8.6821, 50.1109] },  // Чикаго -> Франкфурт
-                { start: [-118.243, 34.052], end: [-74.006, 40.712] }, // Лос-Анджелес -> Нью-Йорк
-                { start: [-0.1276, 51.5072], end: [12.4924, 41.8902] } // Лондон -> Рим
+                { start: [-122.414, 37.776], end: [-74.006, 40.712] }, // SF to NY
+                { start: [-118.243, 34.052], end: [-87.629, 41.878] }, // LA to Chicago
+                { start: [-80.191, 25.761], end: [-122.332, 47.606] }, // Miami to Seattle
+                { start: [-95.369, 29.760], end: [-71.058, 42.360] }   // Houston to Boston
             ];
 
-            // Создаем красивую дугу из 100 отрезков
             function getCurve(start, end) {
                 const coords = [];
                 const segments = 100;
@@ -65,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     let t = i / segments;
                     let lng = start[0] + (end[0] - start[0]) * t;
                     let lat = start[1] + (end[1] - start[1]) * t;
-                    // Изгиб дуги
-                    lat += Math.sin(t * Math.PI) * 8; 
+                    // Аккуратная дуга для США
+                    lat += Math.sin(t * Math.PI) * 4; 
                     coords.push([lng, lat]);
                 }
                 return coords;
@@ -100,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-                // 2. Движущийся груз (точка)
+                // 2. Движущийся груз (светящаяся точка через WebGL, никаких дефолтных маркеров)
                 map.addSource(`point-${i}`, {
                     'type': 'geojson',
                     'data': {
@@ -138,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Анимация
                 let counter = Math.random(); 
-                let speed = 0.0015 + (Math.random() * 0.002);
+                let speed = 0.002 + (Math.random() * 0.002);
                 
                 function animate() {
                     counter += speed;
@@ -159,7 +174,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 animate();
             });
         });
+    } else {
+        removeLoader();
     }
+
 
     // 3. Global Accordion Logic 
     const accordionWrappers = document.querySelectorAll('.accordion-wrapper');
@@ -190,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
 
     // 4. Pricing Toggle Logic
     const pricingToggle = document.getElementById('pricing-toggle');

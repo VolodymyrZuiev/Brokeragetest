@@ -15,7 +15,36 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { font-family: var(--font-sans); background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+body.loading { overflow: hidden; } 
+
 a { text-decoration: none; color: inherit; }
+
+/* --- Preloader Styles --- */
+.preloader {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #020617;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+.preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+.loader-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(0, 85, 255, 0.2);
+    border-top-color: #0055FF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { 
+    to { transform: rotate(360deg); } 
+}
 
 /* --- Premium WOW Animations --- */
 @keyframes panGrid { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
@@ -23,7 +52,6 @@ a { text-decoration: none; color: inherit; }
 @keyframes pulseGlow { 0% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; } 50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; } }
 @keyframes gradientText { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
 
-/* Cinematic Fade Up on Load */
 @keyframes fadeUp { 0% { opacity: 0; transform: translateY(40px); } 100% { opacity: 1; transform: translateY(0); } }
 @keyframes fadeUpHeroImage { 0% { opacity: 0; transform: translateY(20%); } 100% { opacity: 1; transform: translateY(10%); } }
 
@@ -62,7 +90,7 @@ a { text-decoration: none; color: inherit; }
     justify-content: space-between; 
     align-items: center; 
     padding: 20px 48px; 
-    background: rgba(2, 6, 23, 0.85); /* Dark premium glassmorphism */
+    background: rgba(2, 6, 23, 0.85); 
     backdrop-filter: blur(16px); 
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -98,13 +126,10 @@ a { text-decoration: none; color: inherit; }
     height: 100%;
     z-index: 0;
     opacity: 0.8;
-    -webkit-mask-image: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%);
-    mask-image: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%);
 }
 
-/* Делаем фон карты прозрачным, чтобы он слился с нашим 020617 */
 .maplibregl-canvas-container { opacity: 0.7; }
-.maplibregl-control-container { display: none; } /* Прячем лого и кнопки */
+.maplibregl-control-container { display: none; } 
 
 /* Hero Section Inner */
 .hero { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding-top: 120px; position: relative; z-index: 10;}
